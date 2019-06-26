@@ -55,7 +55,7 @@ The database is designed base on Star schema with one fact table and five dimens
 |COLUMN  	    |TYPE  	        | NOTE   	                             |
 |-------------- |---------------| ---------------------------------------|
 |songplay_id    |SERIAL         | Primary Key                            |
-|start_time     |BIGINT         | foreign key of dimTime table, sortkey  |
+|start_time     |TIMESTAMP      | foreign key of dimTime table, sortkey  |
 |user_id        |INTEGER        | foreign key of dimUsers table          |
 |level          |VARCHAR        |                                        |
 |song_id        |VARCHAR        | foreign key of dimSongs table          |
@@ -99,7 +99,7 @@ The database is designed base on Star schema with one fact table and five dimens
 
 |COLUMN  	    |TYPE  	        | NOTE   	           |
 |-------------- |---------------|----------------------|
-|start_time     |BIGINT         | Primary Key, sortkey |
+|start_time     |TIMESTAMP      | Primary Key, sortkey |
 |hour           |SMALLINT       | allow null           |
 |day            |SMALLINT       | allow null           |
 |week           |SMALLINT       | allow null           |
