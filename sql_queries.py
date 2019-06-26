@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS stageEvents
   ,auth          VARCHAR(50) NULL
   ,firstName     VARCHAR(25) NULL
   ,gender        VARCHAR(10) NULL
-  ,itemInSession SMALLINT NOT NULL
+  ,itemInSession SMALLINT NULL
   ,lastName      VARCHAR(25) NULL
   ,length        FLOAT NULL DEFAULT 0
   ,level         VARCHAR(20) NULL
@@ -39,10 +39,10 @@ CREATE TABLE IF NOT EXISTS stageEvents
   ,method        VARCHAR(10) NULL
   ,page          VARCHAR(20)  NULL
   ,registration  VARCHAR(50)  NULL
-  ,sessionId     INTEGER  NOT NULL
+  ,sessionId     INTEGER  NULL
   ,song          VARCHAR(200)  NULL
-  ,status        SMALLINT NOT NULL
-  ,ts            BIGINT NOT NULL
+  ,status        SMALLINT NULL
+  ,ts            TIMESTAMP NULL
   ,userAgent     VARCHAR(200) NULL
   ,userId        INTEGER  NULL
 )
@@ -52,14 +52,14 @@ staging_songs_table_create = ("""
 CREATE TABLE IF NOT EXISTS stageSongs
 (
    num_songs        SMALLINT
-  ,artist_id        VARCHAR(50) NOT NULL
-  ,artist_latitude  NUMERIC(9,5) NULL
-  ,artist_longitude NUMERIC(9,5) NULL
+  ,artist_id        VARCHAR(50) NULL
+  ,artist_latitude  FLOAT NULL
+  ,artist_longitude FLOAT NULL
   ,artist_location  TEXT NULL
   ,artist_name      TEXT NULL
   ,song_id          VARCHAR(50) NULL
   ,title            VARCHAR(200) NULL
-  ,duration         NUMERIC(9,5) NULL
+  ,duration         FLOAT NULL
   ,year             SMALLINT NULL
 )
 """)
@@ -68,7 +68,7 @@ songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS factSongplays
 (
     songplay_id INTEGER PRIMARY KEY IDENTITY(0,1),
-    start_time BIGINT NOT NULL REFERENCES dimTime(start_time) sortkey,
+    start_time TIMESTAMP NOT NULL REFERENCES dimTime(start_time) sortkey,
     user_id INTEGER NOT NULL REFERENCES dimUsers(user_id),
     level VARCHAR(50) NULL,
     song_id VARCHAR NOT NULL REFERENCES dimSongs(song_id),
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS dimArtists
 time_table_create = ("""
 CREATE TABLE IF NOT EXISTS dimTime
 (
-    start_time BIGINT NOT NULL PRIMARY KEY sortkey,
+    start_time TIMESTAMP NOT NULL PRIMARY KEY sortkey,
     hour SMALLINT,
     day SMALLINT,
     week SMALLINT,
@@ -187,6 +187,7 @@ SELECT DISTINCT
     e.level
 FROM stageEvents AS e 
 WHERE e.userId IS NOT NULL 
+AND e.page = 'NextSong'
 """)
 
 song_table_insert = ("""
@@ -234,15 +235,14 @@ INSERT INTO dimTime(
     weekday SMALLINT   
 ) 
 SELECT DISTINCT 
-    e.ts,
-    CAST(DATE_PART('hour', e.ts) as Integer),
-    CAST(DATE_PART('day', e.ts) as Integer), 
-    CAST(DATE_PART('week', e.ts) as Integer),
-    CAST(DATE_PART('month', e.ts) as Integer),
-    CAST(DATE_PART('year', e.ts) as Integer),
-    CAST(DATE_PART('dow', e.ts) as Integer)
-FROM stageEvents AS e 
-WHERE e.page = 'NextSong'
+    fs.start_time,
+    CAST(DATE_PART('hour', fs.start_time) as Integer),
+    CAST(DATE_PART('day', fs.start_time) as Integer), 
+    CAST(DATE_PART('week', fs.start_time) as Integer),
+    CAST(DATE_PART('month', fs.start_time) as Integer),
+    CAST(DATE_PART('year', fs.start_time) as Integer),
+    CAST(DATE_PART('dow', fs.start_time) as Integer)
+FROM factSongplays AS fs 
 """)
 
 # QUERY LISTS

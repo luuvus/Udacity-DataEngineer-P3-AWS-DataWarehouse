@@ -4,6 +4,9 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    """
+    Run all drop table SQL statements.
+    """
     for query in drop_table_queries:
         if len(query) > 1:
                 cur.execute(query)
@@ -11,6 +14,9 @@ def drop_tables(cur, conn):
 
 
 def create_tables(cur, conn):
+    """
+    Run all create table SQL statements.
+    """        
     for query in create_table_queries:
         if len(query) > 1:
                 cur.execute(query)
@@ -18,6 +24,9 @@ def create_tables(cur, conn):
 
 
 def main():
+    """
+    Connect to Redshift database and execute drop and create tables.
+    """ 
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 

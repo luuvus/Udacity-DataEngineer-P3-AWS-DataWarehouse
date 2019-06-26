@@ -36,13 +36,13 @@ A staging database will be created on Amazon Redshift, a  cloud data warehouse s
 |----------------|---------------|--------------------------------|
 |num_songs       |SMALLINT       | total songs count              |
 |artist_id       |VARCHAR        | unique record ID of the artist |
-|artist_latitude |NUMERIC        | artist's location latitude     |
-|artist_longitude|NUMERIC        | artist's location longitude    |
+|artist_latitude |FLOAT          | artist's location latitude     |
+|artist_longitude|FLOAT          | artist's location longitude    |
 |artist_location |TEXT           | artist's geo location name     |
 |artist_name     |TEXT           | full name of artist            |
 |song_id         |VARCHAR        | unique record ID of the song   |
 |title           |VARCHAR        | title of the song              |
-|duration        |NUMERIC        | duration of song               |
+|duration        |FLOAT          | duration of song               |
 |year            |INTEGER        | song release year              |
 
 
@@ -108,7 +108,7 @@ The database is designed base on Star schema with one fact table and five dimens
 |weekday        |SMALLINT       | allow null           |
 
 ## Extract-Transform-Load (ETL) Pipeline
-ETL pipeline is written in Python, which extract data from static text files, transform data to clean/proper data format, then load the data into related tables in the database.
+ETL pipeline is written in Python, which extract data from static text files, transform data to a clean/proper data format, then load the data into related tables in the database.
 
 The text files are in JSON format and contain data about songs, users, song play sessions/activities. The files are located on two Amazon S3 directories at **"s3://udacity-dend/log_data"** and **"s3://udacity-dend/song_data"**.
 
@@ -126,7 +126,7 @@ The text files are in JSON format and contain data about songs, users, song play
 
 ## How To Run
 
-Th following must be setup on Amazon Web Services before running the scripts/files in this project:
+The following must be setup on Amazon Web Services before running the scripts/files in this project:
 
 * Create Amazon role with have "read" access privilege to Amazon S3.
 * Create a Redshift cluster with at least 8 nodes to get a faster data copying and processing and assigned this cluster with Amazon role with S3 read access privilege.
