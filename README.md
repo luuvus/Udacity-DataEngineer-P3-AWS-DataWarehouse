@@ -9,6 +9,7 @@ The startup wants a data engineer to build an ETL pipeline that extracts data fr
 A staging database will be created on Amazon Redshift, a  cloud data warehouse service, with two tables "stageEvents" and "stageSongs" to store raw data that are extracted from JSON files that resides on Amazon S3 storage service. These JSON files contains user's song play activies/events and song meta data. These tables have simplistic schema without any primary keys or references as they are mainly serve as temporary holding storage for further processing.
 
 **stageEvents** - store user's song play activies
+
 |COLUMN  	    |TYPE  	        | NOTE   	                             |
 |-------------- |---------------| ---------------------------------------|
 |artist         |TEXT           | full name of artist                    |
@@ -30,6 +31,7 @@ A staging database will be created on Amazon Redshift, a  cloud data warehouse s
 |userId         |INTEGER        | unique record ID of the user           |
 
 **stageSongs** - store song and artist info
+
 |COLUMN  	     |TYPE  	     | NOTE   	                      |
 |----------------|---------------|--------------------------------|
 |num_songs       |SMALLINT       | total songs count              |
